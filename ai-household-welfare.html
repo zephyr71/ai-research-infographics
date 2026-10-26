@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>저소득국가 AI 효과 검토</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: single-column stack of glass cards on a deep-navy gradient, matching the blog's existing infographics. */
+:root{
+  --bg:#0b1030;--bg2:#17205a;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.10);--line:rgba(255,255,255,.15);
+  --fg:#eef1ff;--fg2:#b6bee3;--muted:#8d97c7;--accent:#5cc8ff;--on-accent:#0b1030;
+  --s1:#30a0d0;--s2:#d27620;--s3:#9a7df0;
+  --good:#3ddc97;--warn:#ffd166;--bad:#ff8a8a;--track:rgba(255,255,255,.10);
+  --f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+    --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+    --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+    --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+  --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+  --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+  --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(165deg,var(--bg) 0%,var(--bg2) 100%);color:var(--fg);font:400 15px/1.65 var(--f-body);word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:880px;margin-inline:auto;padding-inline:16px;padding-block:28px 44px;display:grid;gap:18px}
+header{display:grid;gap:10px;text-align:center;padding-block:8px 4px}
+h1{margin:0;font-size:clamp(26px,5.6vw,40px);line-height:1.2;font-weight:900;color:var(--accent);text-wrap:balance}
+.sub{margin:0;color:var(--fg2);font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;min-width:0}
+h2{margin:0;font-size:18px;line-height:1.35;font-weight:700;display:flex;gap:10px;align-items:center}
+h3{margin:0;font-size:15px;font-weight:700}
+p{margin:0}
+.ico{font-size:20px;line-height:1}
+.lead{color:var(--fg2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--fg2)}
+.chip.warn{color:var(--warn);border-color:currentColor;background:transparent}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--track);border-radius:12px;justify-self:start}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--fg2);background:transparent;border:0;border-radius:9px;padding:7px 14px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--fg2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px}
+.ttl{font-size:13px;color:var(--muted)}
+/* bars */
+.bars{display:grid;gap:12px}
+.brow{display:grid;grid-template-columns:minmax(110px,190px) 1fr 72px;gap:6px 12px;align-items:center}
+.blabel{font-size:14px;color:var(--fg)}
+.btrack{height:14px;background:var(--track);border-radius:4px;display:flex;align-items:center}
+.bfill{height:100%;min-width:2px;border-radius:0 4px 4px 0;background:var(--c,var(--s1));transform-origin:left;animation:grow .6s ease-out both;cursor:default}
+.bval{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:14px}
+.bgroup{display:grid;gap:3px}
+.bgroup .brow{grid-template-columns:minmax(0,1fr) 72px}
+.gtitle{font-size:14px;font-weight:500;margin-bottom:2px}
+@keyframes grow{from{transform:scaleX(0)}}
+@media (max-width:540px){
+  .brow{grid-template-columns:1fr 64px}
+  .brow .blabel{grid-column:1/-1}
+}
+/* diverging */
+.drow{display:grid;grid-template-columns:minmax(110px,210px) 1fr 76px;gap:6px 12px;align-items:center}
+.dtrack{position:relative;height:14px;background:var(--track);border-radius:4px}
+.dtrack::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.dfill{position:absolute;top:0;bottom:0;background:var(--c);animation:growc .6s ease-out both}
+.dfill.neg{right:50%;border-radius:4px 0 0 4px;transform-origin:right}
+.dfill.pos{left:50%;border-radius:0 4px 4px 0;transform-origin:left}
+@keyframes growc{from{transform:scaleX(0)}}
+@media (max-width:540px){.drow{grid-template-columns:1fr 70px}.drow .blabel{grid-column:1/-1}}
+/* tiles, notes, pills */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card2);border-radius:12px;padding:14px;text-align:center;display:grid;gap:2px;min-width:0}
+.big{font-size:28px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.cap{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--fg2);background:var(--card2);border-radius:12px;padding:12px 14px}
+.pill{display:inline-flex;gap:5px;align-items:center;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;border:1px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--good)}.pill.neutral{color:var(--muted)}.pill.warn{color:var(--warn)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.step{background:var(--card2);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--fg2);display:grid;gap:4px;min-width:0}
+.step b{color:var(--fg);font-size:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.panel{background:var(--card2);border-radius:12px;padding:14px;display:grid;gap:8px;min-width:0}
+.panel ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;color:var(--fg2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:12.5px}
+tbody tr:hover td{background:var(--card2)}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;background:var(--card2);border-radius:12px;padding:10px 14px}
+.item span{font-size:13px;color:var(--fg2);grid-column:1/-1}
+.stack{display:flex;gap:2px;height:30px}
+.stack div{background:var(--c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--on-accent);overflow:hidden;min-width:0;border-radius:4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.slide{display:grid;gap:6px}
+.slide label{font-size:13px;color:var(--fg2);display:flex;justify-content:space-between}
+/* dot plot */
+.dp{display:grid;gap:12px}
+.dprow{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:6px 12px;align-items:center}
+.dpt{position:relative;height:28px}
+.dpt::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--track);transform:translateY(-50%)}
+.dpg{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.dpg.base{background:var(--muted);width:2px}
+.dpd{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--c,var(--s1));border:2px solid var(--card);transform:translate(-50%,-50%);cursor:default}
+.dpr{position:absolute;top:50%;height:10px;border-radius:5px;background:var(--c,var(--s1));transform:translateY(-50%);opacity:.9}
+.dpv{position:absolute;top:-2px;transform:translateX(-50%);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:12px}
+.axs{position:relative;height:18px;font-size:12px;color:var(--muted)}
+.axs span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+@media (max-width:540px){.dprow,.axis{grid-template-columns:1fr}.axis>div:first-child{display:none}}
+/* resume mock */
+.resumes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.resume{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;font-size:13.5px;color:var(--fg2);min-width:0}
+.resume b{color:var(--fg);font-size:14.5px}
+.tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;background:var(--s1);color:var(--on-accent);justify-self:start}
+.tag.none{background:var(--track);color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;display:grid;gap:4px;padding-top:6px}
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--bg);color:var(--fg);border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-size:12.5px;line-height:1.5;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+<div class="wrap">
+<header>
+  <h1>AI는 가난한 나라의 가계를 나아지게 하는가</h1>
+  <p class="sub">저소득국가 AI 평가 문헌의 구조적 비판적 검토 | Dang &amp; Do (2026) · IZA Discussion Paper No. 18984</p>
+  <div class="badges"><span class="chip warn">IZA 디스커션 페이퍼 · 2026년 9월 · 동료심사 전</span></div>
+</header>
+
+<section class="card">
+  <h2><span class="ico">🔬</span>연구 개요</h2>
+  <p class="lead">저소득·중하위소득국가 가계를 대상으로 AI 개입의 효과를 평가한 연구를 명시적 포함 기준으로 모아, 무엇이 알려져 있고 무엇이 빠져 있는지 정리했습니다.</p>
+  <div class="flow">
+    <div class="step"><b>1. 선별</b>명시적 포함 기준으로 평가 연구를 고릅니다.</div>
+    <div class="step"><b>2. 평가</b>각 연구의 인과 식별 설계와 편향 위험을 봅니다.</div>
+    <div class="step"><b>3. 집계</b>생산성·시간, 학습 성취, 소비·빈곤 영역으로 나눕니다.</div>
+  </div>
+  <p class="note">개입의 AI(효과를 평가받는 AI)와 측정의 AI(자산·빈곤 예측 같은 도구)를 구분해 함께 검토합니다. 연구 수가 적어 계량적 메타분석이 아니라 서술적 종합입니다.</p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🪜</span>증거는 중간 지표에서 멈춘다</h2>
+  <div class="seg" id="seg-d" role="group" aria-label="영역 선택">
+    <button type="button" data-v="p" aria-pressed="true">생산성·시간</button><button type="button" data-v="l" aria-pressed="false">학습 성취</button><button type="button" data-v="w" aria-pressed="false">소비·빈곤</button>
+  </div>
+  <div class="tiles" id="d-tiles" aria-live="polite"></div>
+  <p class="note" id="d-note"></p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🌐</span>사용률의 소득 기울기</h2>
+  <p class="lead">국가 간 AI 사용률은 소득 수준과 강하게 동행해 저소득국가에서 활용이 낮습니다. 디지털 격차가 AI 격차로 이어질 위험이 있습니다.</p>
+  <p class="note">AI 기반 자산·후생 예측은 측정 비용을 크게 낮출 가능성이 있지만, 검증 데이터가 부족하다는 한계가 있습니다.</p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🔍</span>읽을 때 주의할 점</h2>
+  <div class="seg" id="seg-read" role="group" aria-label="보기 선택">
+    <button type="button" data-v="yes" aria-pressed="true">보여주는 것</button><button type="button" data-v="no" aria-pressed="false">보여주지 않는 것</button>
+  </div>
+  <div class="panel" id="read-panel" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">💡</span>해석과 적용</h2>
+  <div class="list">
+    <div class="item"><h3>중간 지표의 성공 ≠ 최종 후생</h3><span>중간 지표의 성공이 최종 후생으로 이어지려면 보완 인프라와 제도가 필요합니다.</span></div>
+    <div class="item"><h3>파일럿 평가 설계</h3><span>개발 기구와 정부가 AI 파일럿 평가를 설계할 때 빈곤 결과를 포함한 평가가 선행되어야 한다는 것이 논문의 실질적 권고입니다. 중간 지표 성공만으로 확장을 결정하는 것은 검증되지 않은 적용입니다.</span></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Dang, H.-A. H., &amp; Do, M. N. N. (2026). Can AI improve household welfare in poorer countries? Evidence and measurement challenges (IZA Discussion Paper No. 18984). IZA Institute of Labor Economics. https://docs.iza.org/dp18984.pdf</div>
+  <div>인포그래픽 제작: donghunc.kr | AI 활용 블로그</div>
+</footer>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip=document.createElement('div');tip.className='tip';tip.hidden=true;document.body.appendChild(tip);
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;moveTip(e)}
+function moveTip(e){const r=tip.getBoundingClientRect();let x=e.clientX+14,y=e.clientY+14;if(x+r.width>innerWidth-8)x=Math.max(8,innerWidth-r.width-8);if(y+r.height>innerHeight-8)y=Math.max(8,e.clientY-r.height-14);tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+document.addEventListener('mousemove',e=>{if(!tip.hidden)moveTip(e)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))tip.hidden=true});
+document.addEventListener('focusin',e=>{const t=e.target.closest('[data-tip]');if(t){const r=t.getBoundingClientRect();showTip({clientX:r.left,clientY:r.bottom},t.dataset.tip)}});
+document.addEventListener('focusout',()=>{tip.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')tip.hidden=true});
+/* segmented control: buttons carry data-v; first one starts pressed */
+function seg(id,cb){const el=document.getElementById(id);const bs=$$('button',el);
+  const set=b=>{bs.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v)};
+  bs.forEach(b=>b.addEventListener('click',()=>set(b)));
+  const first=bs.find(b=>b.getAttribute('aria-pressed')==='true')||bs[0];set(first);}
+/* horizontal bars. rows: {l,v,max?,c?,t,show} */
+function bars(host,rows,max,fmt){host.innerHTML=rows.map(r=>{
+  const w=Math.max(0,Math.min(100,r.v/max*100));
+  return `<div class="brow"><div class="blabel">${r.l}</div><div class="btrack"><div class="bfill" tabindex="0" style="width:${w}%;--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show||fmt(r.v))}"></div></div><div class="bval">${r.show||fmt(r.v)}</div></div>`}).join('')}
+/* diverging bars centered on zero. rows: {l,v,c,t,show} */
+function dbars(host,rows,max){host.innerHTML=rows.map(r=>{
+  const w=Math.min(50,Math.abs(r.v)/max*50),cls=r.v<0?'neg':'pos';
+  return `<div class="drow"><div class="blabel">${r.l}</div><div class="dtrack"><div class="dfill ${cls}" tabindex="0" style="width:${w}%;--c:${r.c}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div></div><div class="bval">${r.show}</div></div>`}).join('')}
+/* dot plot on [lo,hi]. rows: {l,pts:[{v,t,c?}]} or {l,range:[a,b],t} */
+function dotplot(host,axisHost,rows,lo,hi,ticks,base){
+  const p=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
+  const grid=ticks.map(t=>`<div class="dpg${t===base?' base':''}" style="left:${p(t)}"></div>`).join('');
+  axisHost.innerHTML=`<div></div><div class="axs">${ticks.map(t=>`<span style="left:${p(t)}">${t.toFixed(2)}</span>`).join('')}</div>`;
+  host.innerHTML=rows.map(r=>{
+    let m='';
+    if(r.range){m=`<div class="dpr" tabindex="0" style="left:${p(r.range[0])};width:calc(${p(r.range[1])} - ${p(r.range[0])});--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div><div class="dpv" style="left:${p((r.range[0]+r.range[1])/2)};top:-16px">${r.show}</div>`}
+    else{m=r.pts.map(q=>`<div class="dpd" tabindex="0" style="left:${p(q.v)};--c:${q.c||'var(--s1)'}" data-tip="${esc(q.t)}" aria-label="${esc(r.l)} ${q.v.toFixed(2)}"></div><div class="dpv" style="left:${p(q.v)};top:-16px">≈${q.v.toFixed(2)}</div>`).join('')}
+    return `<div class="dprow"><div class="blabel">${r.l}</div><div class="dpt" style="margin-top:16px">${grid}${m}</div></div>`}).join('')}
+
+
+const dom={
+ p:{tiles:[['9건','포함 기준을 충족한 평가'],['평균 29%','생산량 또는 소요 시간 기준 개선']],note:'포함 기준을 충족한 9개 평가 연구에서 AI 도구는 평균 29%의 개선을 보였습니다. 출판 편향으로 평균 효과가 과대평가됐을 가능성이 있습니다.'},
+ l:{tiles:[['8개','튜터링 비교'],['0.21 SD','평균 학습 개선']],note:'편향 위험이 높은 실험을 제외하면 효과가 뚜렷하지 않았습니다. 견고성이 약합니다.'},
+ w:{tiles:[['0건','소비·빈곤 인과 효과를 보고하는 자격 있는 연구']],note:'가장 중요한 질문인 빈곤 자체의 감소에 대한 인과 증거는 사실상 공백입니다.'}};
+seg('seg-d',k=>{const d=dom[k];$('#d-tiles').innerHTML=d.tiles.map(x=>`<div class="tile"><span class="big">${x[0]}</span><span class="cap">${x[1]}</span></div>`).join('');$('#d-note').textContent=d.note});
+const read={
+ yes:`<ul><li>저소득국가 AI 개입의 평균적 생산성 효과가 상당하다는 점 (다만 증거 기반은 좁고 질이 불균일)</li><li>학습 성취 효과의 견고성이 약하다는 점</li><li>빈곤 감소의 인과 증거가 공백이라는 점</li></ul>`,
+ no:`<ul><li>빈곤이나 소비에 대한 AI의 인과 효과 (자격 있는 연구가 없음)</li><li>계량적으로 통합한 효과 크기 (서술적 종합)</li><li>외부 타당성 (기술이 빠르게 변하므로 개별 연구의 외부 타당성이 짧음)</li><li>인용된 효과 크기는 각 원 연구의 결과이며 이 논문이 새로 추정한 값이 아님</li></ul>`};
+seg('seg-read',v=>{$('#read-panel').innerHTML=read[v]});
+
+</script>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 인프라 투자와 조달</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: single-column stack of glass cards on a deep-navy gradient, matching the blog's existing infographics. */
+:root{
+  --bg:#0b1030;--bg2:#17205a;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.10);--line:rgba(255,255,255,.15);
+  --fg:#eef1ff;--fg2:#b6bee3;--muted:#8d97c7;--accent:#5cc8ff;--on-accent:#0b1030;
+  --s1:#30a0d0;--s2:#d27620;--s3:#9a7df0;
+  --good:#3ddc97;--warn:#ffd166;--bad:#ff8a8a;--track:rgba(255,255,255,.10);
+  --f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+    --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+    --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+    --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+  --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+  --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+  --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(165deg,var(--bg) 0%,var(--bg2) 100%);color:var(--fg);font:400 15px/1.65 var(--f-body);word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:880px;margin-inline:auto;padding-inline:16px;padding-block:28px 44px;display:grid;gap:18px}
+header{display:grid;gap:10px;text-align:center;padding-block:8px 4px}
+h1{margin:0;font-size:clamp(26px,5.6vw,40px);line-height:1.2;font-weight:900;color:var(--accent);text-wrap:balance}
+.sub{margin:0;color:var(--fg2);font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;min-width:0}
+h2{margin:0;font-size:18px;line-height:1.35;font-weight:700;display:flex;gap:10px;align-items:center}
+h3{margin:0;font-size:15px;font-weight:700}
+p{margin:0}
+.ico{font-size:20px;line-height:1}
+.lead{color:var(--fg2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--fg2)}
+.chip.warn{color:var(--warn);border-color:currentColor;background:transparent}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--track);border-radius:12px;justify-self:start}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--fg2);background:transparent;border:0;border-radius:9px;padding:7px 14px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--fg2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px}
+.ttl{font-size:13px;color:var(--muted)}
+/* bars */
+.bars{display:grid;gap:12px}
+.brow{display:grid;grid-template-columns:minmax(110px,190px) 1fr 72px;gap:6px 12px;align-items:center}
+.blabel{font-size:14px;color:var(--fg)}
+.btrack{height:14px;background:var(--track);border-radius:4px;display:flex;align-items:center}
+.bfill{height:100%;min-width:2px;border-radius:0 4px 4px 0;background:var(--c,var(--s1));transform-origin:left;animation:grow .6s ease-out both;cursor:default}
+.bval{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:14px}
+.bgroup{display:grid;gap:3px}
+.bgroup .brow{grid-template-columns:minmax(0,1fr) 72px}
+.gtitle{font-size:14px;font-weight:500;margin-bottom:2px}
+@keyframes grow{from{transform:scaleX(0)}}
+@media (max-width:540px){
+  .brow{grid-template-columns:1fr 64px}
+  .brow .blabel{grid-column:1/-1}
+}
+/* diverging */
+.drow{display:grid;grid-template-columns:minmax(110px,210px) 1fr 76px;gap:6px 12px;align-items:center}
+.dtrack{position:relative;height:14px;background:var(--track);border-radius:4px}
+.dtrack::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.dfill{position:absolute;top:0;bottom:0;background:var(--c);animation:growc .6s ease-out both}
+.dfill.neg{right:50%;border-radius:4px 0 0 4px;transform-origin:right}
+.dfill.pos{left:50%;border-radius:0 4px 4px 0;transform-origin:left}
+@keyframes growc{from{transform:scaleX(0)}}
+@media (max-width:540px){.drow{grid-template-columns:1fr 70px}.drow .blabel{grid-column:1/-1}}
+/* tiles, notes, pills */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card2);border-radius:12px;padding:14px;text-align:center;display:grid;gap:2px;min-width:0}
+.big{font-size:28px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.cap{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--fg2);background:var(--card2);border-radius:12px;padding:12px 14px}
+.pill{display:inline-flex;gap:5px;align-items:center;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;border:1px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--good)}.pill.neutral{color:var(--muted)}.pill.warn{color:var(--warn)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.step{background:var(--card2);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--fg2);display:grid;gap:4px;min-width:0}
+.step b{color:var(--fg);font-size:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.panel{background:var(--card2);border-radius:12px;padding:14px;display:grid;gap:8px;min-width:0}
+.panel ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;color:var(--fg2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:12.5px}
+tbody tr:hover td{background:var(--card2)}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;background:var(--card2);border-radius:12px;padding:10px 14px}
+.item span{font-size:13px;color:var(--fg2);grid-column:1/-1}
+.stack{display:flex;gap:2px;height:30px}
+.stack div{background:var(--c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--on-accent);overflow:hidden;min-width:0;border-radius:4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.slide{display:grid;gap:6px}
+.slide label{font-size:13px;color:var(--fg2);display:flex;justify-content:space-between}
+/* dot plot */
+.dp{display:grid;gap:12px}
+.dprow{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:6px 12px;align-items:center}
+.dpt{position:relative;height:28px}
+.dpt::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--track);transform:translateY(-50%)}
+.dpg{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.dpg.base{background:var(--muted);width:2px}
+.dpd{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--c,var(--s1));border:2px solid var(--card);transform:translate(-50%,-50%);cursor:default}
+.dpr{position:absolute;top:50%;height:10px;border-radius:5px;background:var(--c,var(--s1));transform:translateY(-50%);opacity:.9}
+.dpv{position:absolute;top:-2px;transform:translateX(-50%);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:12px}
+.axs{position:relative;height:18px;font-size:12px;color:var(--muted)}
+.axs span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+@media (max-width:540px){.dprow,.axis{grid-template-columns:1fr}.axis>div:first-child{display:none}}
+/* resume mock */
+.resumes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.resume{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;font-size:13.5px;color:var(--fg2);min-width:0}
+.resume b{color:var(--fg);font-size:14.5px}
+.tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;background:var(--s1);color:var(--on-accent);justify-self:start}
+.tag.none{background:var(--track);color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;display:grid;gap:4px;padding-top:6px}
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--bg);color:var(--fg);border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-size:12.5px;line-height:1.5;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+<div class="wrap">
+<header>
+  <h1>AI 데이터센터 투자 약 9조 달러는 어떻게 조달되는가</h1>
+  <p class="sub">AI 인프라 투자의 비용, 규모, 조달 구조 | Van Nieuwerburgh (2026) · NBER Working Paper No. 35865</p>
+  <div class="badges"><span class="chip warn">NBER 워킹페이퍼 · 2026년 10월 · 동료심사 전</span><span class="chip">Brookings Papers on Economic Activity 2026년 가을호 게재 예정</span></div>
+</header>
+
+<section class="card">
+  <h2><span class="ico">🔬</span>연구 개요</h2>
+  <p class="lead">AI의 단기 경제적 발자국은 물리적입니다. 칩, 전력, 냉각, 전용 데이터센터가 필요하고, 전력 접근과 부지가 확장의 제약이 되었습니다. 이 논문은 비용을 보텀업으로 추정하고, 규모를 시나리오로 집계하고, 조달 구조를 검토합니다.</p>
+  <div class="flow">
+    <div class="step"><b>비용</b>랙당 전력 밀도와 PUE 1.2에서 캠퍼스 유효 IT 용량을 구하고, MW당 단가를 결합</div>
+    <div class="step"><b>규모</b>가동 중 약 63GW와 개발 파이프라인 약 494GW(착공 47GW, 계획 447GW)를 집계하고 취소율 32.6%를 적용</div>
+    <div class="step"><b>조달</b>하이퍼스케일러 자본지출과 영업현금흐름의 괴리, 거래 유형별 위험 배분 검토</div>
+  </div>
+  <p class="note">저자는 규모 추정을 예측이 아닌 시나리오로 명시합니다. 기존 시설은 랙당 5~10kW였지만 AI 랙은 100kW를 넘습니다.</p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">📊</span>비용, 규모, 조달</h2>
+  <div class="seg" id="seg-v" role="group" aria-label="주제 선택">
+    <button type="button" data-v="c" aria-pressed="true">캠퍼스 비용</button><button type="button" data-v="s" aria-pressed="false">미국 규모 시나리오</button><button type="button" data-v="f" aria-pressed="false">조달 구조</button>
+  </div>
+  <div id="v-body" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🔍</span>읽을 때 주의할 점</h2>
+  <div class="seg" id="seg-read" role="group" aria-label="보기 선택">
+    <button type="button" data-v="yes" aria-pressed="true">보여주는 것</button><button type="button" data-v="no" aria-pressed="false">보여주지 않는 것</button>
+  </div>
+  <div class="panel" id="read-panel" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">💡</span>해석과 적용</h2>
+  <div class="list">
+    <div class="item"><h3>투자 규모 자체가 거시 변수</h3><span>생산성 효과 논쟁과 별개로 투자가 지금 일어나고 있고, 계약 구조가 위험의 분포를 결정합니다.</span></div>
+    <div class="item"><h3>위험은 사라지지 않고 이동</h3><span>부채표 밖으로 옮겨진 노출이 누구에게 쌓이는지가 새로운 감시 지점입니다.</span></div>
+    <div class="item"><h3>전망이나 투자 권유가 아님</h3><span>이 투자가 정당화될 만큼 AI 수익이 실현될지는 이 연구가 답하지 않습니다. 시나리오를 전망이나 투자 권유로 읽는 것은 검증되지 않은 적용입니다.</span></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Van Nieuwerburgh, S. (2026). Financing the AI buildout (NBER Working Paper No. 35865). National Bureau of Economic Research. https://doi.org/10.3386/w35865</div>
+  <div>인포그래픽 제작: donghunc.kr | AI 활용 블로그</div>
+</footer>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip=document.createElement('div');tip.className='tip';tip.hidden=true;document.body.appendChild(tip);
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;moveTip(e)}
+function moveTip(e){const r=tip.getBoundingClientRect();let x=e.clientX+14,y=e.clientY+14;if(x+r.width>innerWidth-8)x=Math.max(8,innerWidth-r.width-8);if(y+r.height>innerHeight-8)y=Math.max(8,e.clientY-r.height-14);tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+document.addEventListener('mousemove',e=>{if(!tip.hidden)moveTip(e)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))tip.hidden=true});
+document.addEventListener('focusin',e=>{const t=e.target.closest('[data-tip]');if(t){const r=t.getBoundingClientRect();showTip({clientX:r.left,clientY:r.bottom},t.dataset.tip)}});
+document.addEventListener('focusout',()=>{tip.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')tip.hidden=true});
+/* segmented control: buttons carry data-v; first one starts pressed */
+function seg(id,cb){const el=document.getElementById(id);const bs=$$('button',el);
+  const set=b=>{bs.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v)};
+  bs.forEach(b=>b.addEventListener('click',()=>set(b)));
+  const first=bs.find(b=>b.getAttribute('aria-pressed')==='true')||bs[0];set(first);}
+/* horizontal bars. rows: {l,v,max?,c?,t,show} */
+function bars(host,rows,max,fmt){host.innerHTML=rows.map(r=>{
+  const w=Math.max(0,Math.min(100,r.v/max*100));
+  return `<div class="brow"><div class="blabel">${r.l}</div><div class="btrack"><div class="bfill" tabindex="0" style="width:${w}%;--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show||fmt(r.v))}"></div></div><div class="bval">${r.show||fmt(r.v)}</div></div>`}).join('')}
+/* diverging bars centered on zero. rows: {l,v,c,t,show} */
+function dbars(host,rows,max){host.innerHTML=rows.map(r=>{
+  const w=Math.min(50,Math.abs(r.v)/max*50),cls=r.v<0?'neg':'pos';
+  return `<div class="drow"><div class="blabel">${r.l}</div><div class="dtrack"><div class="dfill ${cls}" tabindex="0" style="width:${w}%;--c:${r.c}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div></div><div class="bval">${r.show}</div></div>`}).join('')}
+/* dot plot on [lo,hi]. rows: {l,pts:[{v,t,c?}]} or {l,range:[a,b],t} */
+function dotplot(host,axisHost,rows,lo,hi,ticks,base){
+  const p=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
+  const grid=ticks.map(t=>`<div class="dpg${t===base?' base':''}" style="left:${p(t)}"></div>`).join('');
+  axisHost.innerHTML=`<div></div><div class="axs">${ticks.map(t=>`<span style="left:${p(t)}">${t.toFixed(2)}</span>`).join('')}</div>`;
+  host.innerHTML=rows.map(r=>{
+    let m='';
+    if(r.range){m=`<div class="dpr" tabindex="0" style="left:${p(r.range[0])};width:calc(${p(r.range[1])} - ${p(r.range[0])});--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div><div class="dpv" style="left:${p((r.range[0]+r.range[1])/2)};top:-16px">${r.show}</div>`}
+    else{m=r.pts.map(q=>`<div class="dpd" tabindex="0" style="left:${p(q.v)};--c:${q.c||'var(--s1)'}" data-tip="${esc(q.t)}" aria-label="${esc(r.l)} ${q.v.toFixed(2)}"></div><div class="dpv" style="left:${p(q.v)};top:-16px">≈${q.v.toFixed(2)}</div>`).join('')}
+    return `<div class="dprow"><div class="blabel">${r.l}</div><div class="dpt" style="margin-top:16px">${grid}${m}</div></div>`}).join('')}
+
+
+const P1='var(--s1)',P2='var(--s2)',P3='var(--s3)';
+const vb={
+ c:()=>`<p class="ttl">AI 캠퍼스 건설 비용 (억 달러)</p><div class="bars" id="cost"></div><p class="note">200MW급 캠퍼스 하나에 약 82억 달러, 1GW 기준 약 410억 달러입니다.</p>`,
+ s:()=>`<div class="tiles"><div class="tile"><span class="big">약 8.97조 달러</span><span class="cap">2025~2032년 총투자 (중심 시나리오)</span></div><div class="tile"><span class="big">3.22%</span><span class="cap">연평균 GDP 대비</span></div></div><p class="ttl">중심 시나리오의 개발 파이프라인 결과 (GW)</p><div class="bars" id="gw"></div><p class="note">이 규모는 GDP 대비로 운하, 철도, 전기화, 고속도로, 통신망의 역대 투자 붐을 웃돕니다.</p>`,
+ f:()=>`<div class="tiles"><div class="tile"><span class="big">처음으로</span><span class="cap">하이퍼스케일러 자본지출이 합산 영업현금흐름을 초과</span></div></div><div class="chips"><span class="chip">리스</span><span class="chip">합작</span><span class="chip">프로젝트 부채</span><span class="chip">사모신용</span><span class="chip">증권화</span><span class="chip">특수목적법인</span></div><p class="note">조달 여력은 넓어지지만 자산 레버리지가 높아지고 우발채무가 보이지 않게 되며, 임차인 집중, 기술 노후화, 공사 지연, 잔존가치 불확실성이 투자자에게 이전됩니다. 리스 금융은 GPU 등 IT 장비로도 확장되어, 보고된 레버리지가 낮아 보여도 실질 부채가 부채표 밖에 쌓입니다.</p>`};
+seg('seg-v',k=>{$('#v-body').innerHTML=vb[k]();
+ if(k==='c')bars($('#cost'),[{l:'200MW급 캠퍼스',v:82,c:P1,show:'약 82억',t:'200MW급 AI 캠퍼스 약 82억 달러'},{l:'1GW 기준',v:410,c:P2,show:'약 410억',t:'1GW 기준 약 410억 달러'}],450,v=>v);
+ if(k==='s')bars($('#gw'),[{l:'2025~2032년 완공',v:188.3,c:P1,show:'188.3GW',t:'2025~2032년 새로 가동 188.3GW'},{l:'2032년 이후 완공',v:114.9,c:P3,show:'114.9GW',t:'2032년 이후 114.9GW'},{l:'완공되지 않음',v:213.5,c:P2,show:'213.5GW',t:'완공되지 않는 213.5GW'}],230,v=>v)});
+const read={
+ yes:`<ul><li>AI 붐의 단기 실물 규모가 역대 인프라 붐을 넘는 투자 사이클이라는 시나리오</li><li>조달의 중심이 내부 현금흐름에서 복합적 외부 금융 구조로 이동하고 있다는 점</li></ul>`,
+ no:`<ul><li>투자가 정당화될 만큼 AI 수익이 실현될지</li><li>예측 (계획 프로젝트의 완공 가정에 민감한 시나리오)</li><li>부채표 밖 노출의 총량 (공개 자료로 완전히 집계할 수 없음)</li><li>다른 냉각·전력·칩 조합에서의 단가 (현재 기술 조합을 고정)</li></ul>`};
+seg('seg-read',v=>{$('#read-panel').innerHTML=read[v]});
+
+</script>
+</html>

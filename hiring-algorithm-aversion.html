@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>채용 알고리즘 회피의 기원</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: single-column stack of glass cards on a deep-navy gradient, matching the blog's existing infographics. */
+:root{
+  --bg:#0b1030;--bg2:#17205a;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.10);--line:rgba(255,255,255,.15);
+  --fg:#eef1ff;--fg2:#b6bee3;--muted:#8d97c7;--accent:#5cc8ff;--on-accent:#0b1030;
+  --s1:#30a0d0;--s2:#d27620;--s3:#9a7df0;
+  --good:#3ddc97;--warn:#ffd166;--bad:#ff8a8a;--track:rgba(255,255,255,.10);
+  --f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+    --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+    --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+    --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+  --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+  --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+  --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(165deg,var(--bg) 0%,var(--bg2) 100%);color:var(--fg);font:400 15px/1.65 var(--f-body);word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:880px;margin-inline:auto;padding-inline:16px;padding-block:28px 44px;display:grid;gap:18px}
+header{display:grid;gap:10px;text-align:center;padding-block:8px 4px}
+h1{margin:0;font-size:clamp(26px,5.6vw,40px);line-height:1.2;font-weight:900;color:var(--accent);text-wrap:balance}
+.sub{margin:0;color:var(--fg2);font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;min-width:0}
+h2{margin:0;font-size:18px;line-height:1.35;font-weight:700;display:flex;gap:10px;align-items:center}
+h3{margin:0;font-size:15px;font-weight:700}
+p{margin:0}
+.ico{font-size:20px;line-height:1}
+.lead{color:var(--fg2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--fg2)}
+.chip.warn{color:var(--warn);border-color:currentColor;background:transparent}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--track);border-radius:12px;justify-self:start}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--fg2);background:transparent;border:0;border-radius:9px;padding:7px 14px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--fg2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px}
+.ttl{font-size:13px;color:var(--muted)}
+/* bars */
+.bars{display:grid;gap:12px}
+.brow{display:grid;grid-template-columns:minmax(110px,190px) 1fr 72px;gap:6px 12px;align-items:center}
+.blabel{font-size:14px;color:var(--fg)}
+.btrack{height:14px;background:var(--track);border-radius:4px;display:flex;align-items:center}
+.bfill{height:100%;min-width:2px;border-radius:0 4px 4px 0;background:var(--c,var(--s1));transform-origin:left;animation:grow .6s ease-out both;cursor:default}
+.bval{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:14px}
+.bgroup{display:grid;gap:3px}
+.bgroup .brow{grid-template-columns:minmax(0,1fr) 72px}
+.gtitle{font-size:14px;font-weight:500;margin-bottom:2px}
+@keyframes grow{from{transform:scaleX(0)}}
+@media (max-width:540px){
+  .brow{grid-template-columns:1fr 64px}
+  .brow .blabel{grid-column:1/-1}
+}
+/* diverging */
+.drow{display:grid;grid-template-columns:minmax(110px,210px) 1fr 76px;gap:6px 12px;align-items:center}
+.dtrack{position:relative;height:14px;background:var(--track);border-radius:4px}
+.dtrack::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.dfill{position:absolute;top:0;bottom:0;background:var(--c);animation:growc .6s ease-out both}
+.dfill.neg{right:50%;border-radius:4px 0 0 4px;transform-origin:right}
+.dfill.pos{left:50%;border-radius:0 4px 4px 0;transform-origin:left}
+@keyframes growc{from{transform:scaleX(0)}}
+@media (max-width:540px){.drow{grid-template-columns:1fr 70px}.drow .blabel{grid-column:1/-1}}
+/* tiles, notes, pills */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card2);border-radius:12px;padding:14px;text-align:center;display:grid;gap:2px;min-width:0}
+.big{font-size:28px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.cap{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--fg2);background:var(--card2);border-radius:12px;padding:12px 14px}
+.pill{display:inline-flex;gap:5px;align-items:center;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;border:1px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--good)}.pill.neutral{color:var(--muted)}.pill.warn{color:var(--warn)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.step{background:var(--card2);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--fg2);display:grid;gap:4px;min-width:0}
+.step b{color:var(--fg);font-size:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.panel{background:var(--card2);border-radius:12px;padding:14px;display:grid;gap:8px;min-width:0}
+.panel ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;color:var(--fg2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:12.5px}
+tbody tr:hover td{background:var(--card2)}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;background:var(--card2);border-radius:12px;padding:10px 14px}
+.item span{font-size:13px;color:var(--fg2);grid-column:1/-1}
+.stack{display:flex;gap:2px;height:30px}
+.stack div{background:var(--c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--on-accent);overflow:hidden;min-width:0;border-radius:4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.slide{display:grid;gap:6px}
+.slide label{font-size:13px;color:var(--fg2);display:flex;justify-content:space-between}
+/* dot plot */
+.dp{display:grid;gap:12px}
+.dprow{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:6px 12px;align-items:center}
+.dpt{position:relative;height:28px}
+.dpt::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--track);transform:translateY(-50%)}
+.dpg{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.dpg.base{background:var(--muted);width:2px}
+.dpd{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--c,var(--s1));border:2px solid var(--card);transform:translate(-50%,-50%);cursor:default}
+.dpr{position:absolute;top:50%;height:10px;border-radius:5px;background:var(--c,var(--s1));transform:translateY(-50%);opacity:.9}
+.dpv{position:absolute;top:-2px;transform:translateX(-50%);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:12px}
+.axs{position:relative;height:18px;font-size:12px;color:var(--muted)}
+.axs span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+@media (max-width:540px){.dprow,.axis{grid-template-columns:1fr}.axis>div:first-child{display:none}}
+/* resume mock */
+.resumes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.resume{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;font-size:13.5px;color:var(--fg2);min-width:0}
+.resume b{color:var(--fg);font-size:14.5px}
+.tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;background:var(--s1);color:var(--on-accent);justify-self:start}
+.tag.none{background:var(--track);color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;display:grid;gap:4px;padding-top:6px}
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--bg);color:var(--fg);border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-size:12.5px;line-height:1.5;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+<div class="wrap">
+<header>
+  <h1>사람들은 왜 채용 알고리즘을 피하는가</h1>
+  <p class="sub">투명성, 성별 프로파일링, 자신감 | Dargnies, Hakimov &amp; Kübler (2026) · Management Science, 72(1), 285-301</p>
+  <div class="badges"><span class="chip">동료심사 학술지 논문 · 2026년 1월</span></div>
+</header>
+
+<section class="card">
+  <h2><span class="ico">🔬</span>연구 개요</h2>
+  <p class="lead">실노력 과제를 수행한 근로자 역할과 관리자 역할 참여자가 채용 결정을 사람에게 맡길지 알고리즘에 맡길지 선택하는 온라인 실험입니다. 알고리즘 회피의 기원을 세 갈래로 분해합니다.</p>
+  <div class="flow">
+    <div class="step"><b>근로자 역할</b>세 개의 실노력 과제(과제 1, 2, 둘을 결합한 직무 과제)를 수행하고, 자신과 다른 근로자 사이의 채용 결정을 관리자 또는 알고리즘 중 누가 내릴지 선택</div>
+    <div class="step"><b>관리자 역할</b>채용 결정을 알고리즘에 위임할지 선택</div>
+  </div>
+  <p class="note">이 글에는 효과 크기 수치가 제시되지 않아, 방향과 유의성만 정리했습니다.</p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🧩</span>회피를 만드는 세 요인</h2>
+  <div class="seg" id="seg-f" role="group" aria-label="요인 선택">
+    <button type="button" data-v="g" aria-pressed="true">공정성(성별)</button><button type="button" data-v="t" aria-pressed="false">투명성</button><button type="button" data-v="c" aria-pressed="false">관리자의 과신</button>
+  </div>
+  <div class="list" id="f-list" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🔍</span>읽을 때 주의할 점</h2>
+  <div class="seg" id="seg-read" role="group" aria-label="보기 선택">
+    <button type="button" data-v="yes" aria-pressed="true">보여주는 것</button><button type="button" data-v="no" aria-pressed="false">보여주지 않는 것</button>
+  </div>
+  <div class="panel" id="read-panel" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">💡</span>해석과 적용</h2>
+  <div class="list">
+    <div class="item"><h3>설명보다 공정성 설계와 고지</h3><span>채용 알고리즘을 도입하는 기업은 설명보다 공정성 설계와 그 고지를 우선하고, 관리자에게는 성과 피드백 체계를 갖추는 것이 수용을 높인다는 시사를 얻습니다.</span></div>
+    <div class="item"><h3>회피는 하나의 성향이 아님</h3><span>공정성, 투명성, 자기평가의 세 축이 근로자와 관리자에게 서로 다른 무게로 작용합니다.</span></div>
+    <div class="item"><h3>채용 질로 이어지는지는 미검증</h3><span>어떤 알고리즘이 실제로 더 공정한 채용을 하는지, 수용이 실제 채용 질로 이어지는지는 이 연구가 검증하지 않았습니다.</span></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Dargnies, M.-P., Hakimov, R., &amp; Kübler, D. (2026). Aversion to hiring algorithms: Transparency, gender profiling, and self-confidence. Management Science, 72(1), 285-301. https://doi.org/10.1287/mnsc.2022.02774</div>
+  <div>인포그래픽 제작: donghunc.kr | AI 활용 블로그</div>
+</footer>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip=document.createElement('div');tip.className='tip';tip.hidden=true;document.body.appendChild(tip);
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;moveTip(e)}
+function moveTip(e){const r=tip.getBoundingClientRect();let x=e.clientX+14,y=e.clientY+14;if(x+r.width>innerWidth-8)x=Math.max(8,innerWidth-r.width-8);if(y+r.height>innerHeight-8)y=Math.max(8,e.clientY-r.height-14);tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+document.addEventListener('mousemove',e=>{if(!tip.hidden)moveTip(e)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))tip.hidden=true});
+document.addEventListener('focusin',e=>{const t=e.target.closest('[data-tip]');if(t){const r=t.getBoundingClientRect();showTip({clientX:r.left,clientY:r.bottom},t.dataset.tip)}});
+document.addEventListener('focusout',()=>{tip.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')tip.hidden=true});
+/* segmented control: buttons carry data-v; first one starts pressed */
+function seg(id,cb){const el=document.getElementById(id);const bs=$$('button',el);
+  const set=b=>{bs.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v)};
+  bs.forEach(b=>b.addEventListener('click',()=>set(b)));
+  const first=bs.find(b=>b.getAttribute('aria-pressed')==='true')||bs[0];set(first);}
+/* horizontal bars. rows: {l,v,max?,c?,t,show} */
+function bars(host,rows,max,fmt){host.innerHTML=rows.map(r=>{
+  const w=Math.max(0,Math.min(100,r.v/max*100));
+  return `<div class="brow"><div class="blabel">${r.l}</div><div class="btrack"><div class="bfill" tabindex="0" style="width:${w}%;--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show||fmt(r.v))}"></div></div><div class="bval">${r.show||fmt(r.v)}</div></div>`}).join('')}
+/* diverging bars centered on zero. rows: {l,v,c,t,show} */
+function dbars(host,rows,max){host.innerHTML=rows.map(r=>{
+  const w=Math.min(50,Math.abs(r.v)/max*50),cls=r.v<0?'neg':'pos';
+  return `<div class="drow"><div class="blabel">${r.l}</div><div class="dtrack"><div class="dfill ${cls}" tabindex="0" style="width:${w}%;--c:${r.c}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div></div><div class="bval">${r.show}</div></div>`}).join('')}
+/* dot plot on [lo,hi]. rows: {l,pts:[{v,t,c?}]} or {l,range:[a,b],t} */
+function dotplot(host,axisHost,rows,lo,hi,ticks,base){
+  const p=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
+  const grid=ticks.map(t=>`<div class="dpg${t===base?' base':''}" style="left:${p(t)}"></div>`).join('');
+  axisHost.innerHTML=`<div></div><div class="axs">${ticks.map(t=>`<span style="left:${p(t)}">${t.toFixed(2)}</span>`).join('')}</div>`;
+  host.innerHTML=rows.map(r=>{
+    let m='';
+    if(r.range){m=`<div class="dpr" tabindex="0" style="left:${p(r.range[0])};width:calc(${p(r.range[1])} - ${p(r.range[0])});--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div><div class="dpv" style="left:${p((r.range[0]+r.range[1])/2)};top:-16px">${r.show}</div>`}
+    else{m=r.pts.map(q=>`<div class="dpd" tabindex="0" style="left:${p(q.v)};--c:${q.c||'var(--s1)'}" data-tip="${esc(q.t)}" aria-label="${esc(r.l)} ${q.v.toFixed(2)}"></div><div class="dpv" style="left:${p(q.v)};top:-16px">≈${q.v.toFixed(2)}</div>`).join('')}
+    return `<div class="dprow"><div class="blabel">${r.l}</div><div class="dpt" style="margin-top:16px">${grid}${m}</div></div>`}).join('')}
+
+
+const ff={
+ g:{h:'알고리즘이 성별을 쓰지 않음을 알림',p:'good',pl:'알고리즘 선택 증가',d:'알고리즘이 성별을 쓰지 않는다고 알리면 근로자의 알고리즘 선택이 기준 조건(성별 사용)보다 유의하게 늘었습니다. 공정성 우려가 회피의 한 원인이라는 뜻입니다.'},
+ t:{h:'알고리즘 작동 원리의 상세 설명',p:'neutral',pl:'선호를 높이지 못함',d:'근로자와 관리자 모두에서 선호를 높이지 못했습니다. 투명성 조치만으로는 회피가 풀리지 않습니다.'},
+ c:{h:'관리자에게 자신의 채용 성과 피드백 제공',p:'good',pl:'알고리즘 위임 증가',d:'관리자들은 평균적으로 자신의 채용 판단에 과신이 있었고, 실제 성과 피드백을 받은 관리자는 알고리즘 위임을 더 선택했습니다.'}};
+seg('seg-f',k=>{const x=ff[k];$('#f-list').innerHTML=`<div class="item"><h3>${x.h}</h3><span class="pill ${x.p}">${x.pl}</span><span>${x.d}</span></div>`});
+const read={
+ yes:`<ul><li>알고리즘 회피의 일부가 차별 우려라는 원인에서 나온다는 점</li><li>설명 가능성이 만능이 아니라는 점</li><li>관리자의 과신이 조직 내 저항 요인이고 피드백이 이를 교정할 수 있다는 점</li></ul>`,
+ no:`<ul><li>실제 조직의 위계와 인센티브가 있는 환경에서의 결과 (온라인 실험의 인위적 채용 맥락)</li><li>다른 과제 유형으로의 일반화 (단일 과제 유형)</li><li>실제 기업 도입 데이터와 알고리즘 성능 변화에 따른 수용 변화</li><li>피드백 개입의 현장 효과</li></ul>`};
+seg('seg-read',v=>{$('#read-panel').innerHTML=read[v]});
+
+</script>
+</html>

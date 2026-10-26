@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기업의 AI 도입 실측</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: single-column stack of glass cards on a deep-navy gradient, matching the blog's existing infographics. */
+:root{
+  --bg:#0b1030;--bg2:#17205a;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.10);--line:rgba(255,255,255,.15);
+  --fg:#eef1ff;--fg2:#b6bee3;--muted:#8d97c7;--accent:#5cc8ff;--on-accent:#0b1030;
+  --s1:#30a0d0;--s2:#d27620;--s3:#9a7df0;
+  --good:#3ddc97;--warn:#ffd166;--bad:#ff8a8a;--track:rgba(255,255,255,.10);
+  --f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+    --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+    --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+    --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f2f5ff;--bg2:#e1e8ff;--card:#ffffff;--card2:#eef2ff;--line:#cfd7f3;
+  --fg:#131a40;--fg2:#444d7d;--muted:#5f6a96;--accent:#1565c0;--on-accent:#ffffff;
+  --s1:#0a78b5;--s2:#b85a00;--s3:#6d4fd1;
+  --good:#12805a;--warn:#8a5a00;--bad:#c62f2f;--track:rgba(19,26,64,.10);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(165deg,var(--bg) 0%,var(--bg2) 100%);color:var(--fg);font:400 15px/1.65 var(--f-body);word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:880px;margin-inline:auto;padding-inline:16px;padding-block:28px 44px;display:grid;gap:18px}
+header{display:grid;gap:10px;text-align:center;padding-block:8px 4px}
+h1{margin:0;font-size:clamp(26px,5.6vw,40px);line-height:1.2;font-weight:900;color:var(--accent);text-wrap:balance}
+.sub{margin:0;color:var(--fg2);font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;min-width:0}
+h2{margin:0;font-size:18px;line-height:1.35;font-weight:700;display:flex;gap:10px;align-items:center}
+h3{margin:0;font-size:15px;font-weight:700}
+p{margin:0}
+.ico{font-size:20px;line-height:1}
+.lead{color:var(--fg2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--fg2)}
+.chip.warn{color:var(--warn);border-color:currentColor;background:transparent}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--track);border-radius:12px;justify-self:start}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--fg2);background:transparent;border:0;border-radius:9px;padding:7px 14px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--fg2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px}
+.ttl{font-size:13px;color:var(--muted)}
+/* bars */
+.bars{display:grid;gap:12px}
+.brow{display:grid;grid-template-columns:minmax(110px,190px) 1fr 72px;gap:6px 12px;align-items:center}
+.blabel{font-size:14px;color:var(--fg)}
+.btrack{height:14px;background:var(--track);border-radius:4px;display:flex;align-items:center}
+.bfill{height:100%;min-width:2px;border-radius:0 4px 4px 0;background:var(--c,var(--s1));transform-origin:left;animation:grow .6s ease-out both;cursor:default}
+.bval{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:14px}
+.bgroup{display:grid;gap:3px}
+.bgroup .brow{grid-template-columns:minmax(0,1fr) 72px}
+.gtitle{font-size:14px;font-weight:500;margin-bottom:2px}
+@keyframes grow{from{transform:scaleX(0)}}
+@media (max-width:540px){
+  .brow{grid-template-columns:1fr 64px}
+  .brow .blabel{grid-column:1/-1}
+}
+/* diverging */
+.drow{display:grid;grid-template-columns:minmax(110px,210px) 1fr 76px;gap:6px 12px;align-items:center}
+.dtrack{position:relative;height:14px;background:var(--track);border-radius:4px}
+.dtrack::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.dfill{position:absolute;top:0;bottom:0;background:var(--c);animation:growc .6s ease-out both}
+.dfill.neg{right:50%;border-radius:4px 0 0 4px;transform-origin:right}
+.dfill.pos{left:50%;border-radius:0 4px 4px 0;transform-origin:left}
+@keyframes growc{from{transform:scaleX(0)}}
+@media (max-width:540px){.drow{grid-template-columns:1fr 70px}.drow .blabel{grid-column:1/-1}}
+/* tiles, notes, pills */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card2);border-radius:12px;padding:14px;text-align:center;display:grid;gap:2px;min-width:0}
+.big{font-size:28px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.cap{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--fg2);background:var(--card2);border-radius:12px;padding:12px 14px}
+.pill{display:inline-flex;gap:5px;align-items:center;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;border:1px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--good)}.pill.neutral{color:var(--muted)}.pill.warn{color:var(--warn)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.step{background:var(--card2);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--fg2);display:grid;gap:4px;min-width:0}
+.step b{color:var(--fg);font-size:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.panel{background:var(--card2);border-radius:12px;padding:14px;display:grid;gap:8px;min-width:0}
+.panel ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;color:var(--fg2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:12.5px}
+tbody tr:hover td{background:var(--card2)}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;background:var(--card2);border-radius:12px;padding:10px 14px}
+.item span{font-size:13px;color:var(--fg2);grid-column:1/-1}
+.stack{display:flex;gap:2px;height:30px}
+.stack div{background:var(--c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--on-accent);overflow:hidden;min-width:0;border-radius:4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.slide{display:grid;gap:6px}
+.slide label{font-size:13px;color:var(--fg2);display:flex;justify-content:space-between}
+/* dot plot */
+.dp{display:grid;gap:12px}
+.dprow{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:6px 12px;align-items:center}
+.dpt{position:relative;height:28px}
+.dpt::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--track);transform:translateY(-50%)}
+.dpg{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.dpg.base{background:var(--muted);width:2px}
+.dpd{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--c,var(--s1));border:2px solid var(--card);transform:translate(-50%,-50%);cursor:default}
+.dpr{position:absolute;top:50%;height:10px;border-radius:5px;background:var(--c,var(--s1));transform:translateY(-50%);opacity:.9}
+.dpv{position:absolute;top:-2px;transform:translateX(-50%);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:12px}
+.axs{position:relative;height:18px;font-size:12px;color:var(--muted)}
+.axs span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+@media (max-width:540px){.dprow,.axis{grid-template-columns:1fr}.axis>div:first-child{display:none}}
+/* resume mock */
+.resumes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.resume{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;font-size:13.5px;color:var(--fg2);min-width:0}
+.resume b{color:var(--fg);font-size:14.5px}
+.tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;background:var(--s1);color:var(--on-accent);justify-self:start}
+.tag.none{background:var(--track);color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;display:grid;gap:4px;padding-top:6px}
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--bg);color:var(--fg);border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-size:12.5px;line-height:1.5;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+<div class="wrap">
+<header>
+  <h1>기업 78%가 AI를 쓰지만, 생산성 기여는 아직 작다</h1>
+  <p class="sub">7개국 고위 경영진 약 9,000명 조사 | Yotzov 외 (2026) · NBER Working Paper No. 34836</p>
+  <div class="badges"><span class="chip warn">NBER 워킹페이퍼 · 2026년 2월 · 동료심사 전</span></div>
+</header>
+
+<section class="card">
+  <h2><span class="ico">🔬</span>연구 개요</h2>
+  <p class="lead">국가 통계기관의 사업체 조사 체계와 연계한 경영진 조사로, AI 도입률, 지출, 활용 강도, 고용·생산성 효과를 한 프레임에서 묻습니다.</p>
+  <div class="chips"><span class="chip">7개국</span><span class="chip">고위 경영진 약 9,000명</span><span class="chip">2026년 여름 수집</span><span class="chip">기술통계 중심 분석</span></div>
+  <p class="note">고용과 생산성 수치는 인과 추정이 아니라 경영진의 자기보고 추정과 기대입니다. 단일 시점 조사입니다.</p>
+</section>
+
+<section class="card">
+  <h2><span class="ico">📊</span>도입, 고용, 생산성</h2>
+  <div class="seg" id="seg-t" role="group" aria-label="주제 선택">
+    <button type="button" data-v="a" aria-pressed="true">도입과 강도</button><button type="button" data-v="e" aria-pressed="false">고용</button><button type="button" data-v="g" aria-pressed="false">생산성 기대</button>
+  </div>
+  <div id="t-body" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">🔍</span>읽을 때 주의할 점</h2>
+  <div class="seg" id="seg-read" role="group" aria-label="보기 선택">
+    <button type="button" data-v="yes" aria-pressed="true">보여주는 것</button><button type="button" data-v="no" aria-pressed="false">보여주지 않는 것</button>
+  </div>
+  <div class="panel" id="read-panel" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2><span class="ico">💡</span>해석과 적용</h2>
+  <div class="list">
+    <div class="item"><h3>도입은 표준, 강도는 얕음</h3><span>도입은 예외가 아니라 표준이 되어 가지만, 지출과 사용 시간의 강도는 도입률에 비해 아직 얕습니다.</span></div>
+    <div class="item"><h3>확산 초기의 특징일 수 있음</h3><span>범용기술의 효과가 조직 재편과 보완 투자 이후에 나타난다면 작은 기여 추정치는 확산 초기 단계의 특징으로 읽을 수 있습니다. 기대가 실현보다 세 배 큰 격차는 기대 형성 자체를 연구 대상으로 만듭니다.</span></div>
+    <div class="item"><h3>기대로 계획하지 말 것</h3><span>생산성 기대치를 근거로 투자나 고용 계획을 세우는 것은 검증되지 않은 적용입니다. 기대는 자기보고일 뿐입니다.</span></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Yotzov, I., Barrero, J. M., Bloom, N., Bunn, P., Chawla, C., Davis, S., Foster, K., Jalca, A., Meyer, B., Mizen, P., Navarrete, M., Oh, S., Garcia Loredo, K., Reid, M., Smietanka, P., Thwaites, G., &amp; Wang, B. Z. (2026). Firm data on AI (NBER Working Paper No. 34836). National Bureau of Economic Research. https://doi.org/10.3386/w34836</div>
+  <div>인포그래픽 제작: donghunc.kr | AI 활용 블로그</div>
+</footer>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip=document.createElement('div');tip.className='tip';tip.hidden=true;document.body.appendChild(tip);
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;moveTip(e)}
+function moveTip(e){const r=tip.getBoundingClientRect();let x=e.clientX+14,y=e.clientY+14;if(x+r.width>innerWidth-8)x=Math.max(8,innerWidth-r.width-8);if(y+r.height>innerHeight-8)y=Math.max(8,e.clientY-r.height-14);tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+document.addEventListener('mousemove',e=>{if(!tip.hidden)moveTip(e)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))tip.hidden=true});
+document.addEventListener('focusin',e=>{const t=e.target.closest('[data-tip]');if(t){const r=t.getBoundingClientRect();showTip({clientX:r.left,clientY:r.bottom},t.dataset.tip)}});
+document.addEventListener('focusout',()=>{tip.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')tip.hidden=true});
+/* segmented control: buttons carry data-v; first one starts pressed */
+function seg(id,cb){const el=document.getElementById(id);const bs=$$('button',el);
+  const set=b=>{bs.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v)};
+  bs.forEach(b=>b.addEventListener('click',()=>set(b)));
+  const first=bs.find(b=>b.getAttribute('aria-pressed')==='true')||bs[0];set(first);}
+/* horizontal bars. rows: {l,v,max?,c?,t,show} */
+function bars(host,rows,max,fmt){host.innerHTML=rows.map(r=>{
+  const w=Math.max(0,Math.min(100,r.v/max*100));
+  return `<div class="brow"><div class="blabel">${r.l}</div><div class="btrack"><div class="bfill" tabindex="0" style="width:${w}%;--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show||fmt(r.v))}"></div></div><div class="bval">${r.show||fmt(r.v)}</div></div>`}).join('')}
+/* diverging bars centered on zero. rows: {l,v,c,t,show} */
+function dbars(host,rows,max){host.innerHTML=rows.map(r=>{
+  const w=Math.min(50,Math.abs(r.v)/max*50),cls=r.v<0?'neg':'pos';
+  return `<div class="drow"><div class="blabel">${r.l}</div><div class="dtrack"><div class="dfill ${cls}" tabindex="0" style="width:${w}%;--c:${r.c}" data-tip="${esc(r.t||r.l)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div></div><div class="bval">${r.show}</div></div>`}).join('')}
+/* dot plot on [lo,hi]. rows: {l,pts:[{v,t,c?}]} or {l,range:[a,b],t} */
+function dotplot(host,axisHost,rows,lo,hi,ticks,base){
+  const p=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
+  const grid=ticks.map(t=>`<div class="dpg${t===base?' base':''}" style="left:${p(t)}"></div>`).join('');
+  axisHost.innerHTML=`<div></div><div class="axs">${ticks.map(t=>`<span style="left:${p(t)}">${t.toFixed(2)}</span>`).join('')}</div>`;
+  host.innerHTML=rows.map(r=>{
+    let m='';
+    if(r.range){m=`<div class="dpr" tabindex="0" style="left:${p(r.range[0])};width:calc(${p(r.range[1])} - ${p(r.range[0])});--c:${r.c||'var(--s1)'}" data-tip="${esc(r.t)}" aria-label="${esc(r.l)} ${esc(r.show)}"></div><div class="dpv" style="left:${p((r.range[0]+r.range[1])/2)};top:-16px">${r.show}</div>`}
+    else{m=r.pts.map(q=>`<div class="dpd" tabindex="0" style="left:${p(q.v)};--c:${q.c||'var(--s1)'}" data-tip="${esc(q.t)}" aria-label="${esc(r.l)} ${q.v.toFixed(2)}"></div><div class="dpv" style="left:${p(q.v)};top:-16px">≈${q.v.toFixed(2)}</div>`).join('')}
+    return `<div class="dprow"><div class="blabel">${r.l}</div><div class="dpt" style="margin-top:16px">${grid}${m}</div></div>`}).join('')}
+
+
+const P1='var(--s1)',P2='var(--s2)';
+const body={
+ a:()=>`<div class="tiles"><div class="tile"><span class="big">78%</span><span class="cap">AI를 사용하는 기업</span></div><div class="tile"><span class="big">약 $2,000</span><span class="cap">미국 기업의 직원 1인당 평균 AI 지출</span></div></div><p class="ttl">경영진 개인의 주당 AI 사용 시간</p><div class="bars" id="hrs"></div><p class="note">도입은 대기업과 정보·전문서비스업에서 더 높았습니다.</p>`,
+ e:()=>`<div class="tiles"><div class="tile"><span class="big">효과 없음</span><span class="cap">지금까지 측정 가능한 순 고용 효과</span></div><div class="tile"><span class="big">40% 이상</span><span class="cap">일부 직무 축소와 다른 직무 확대가 맞물리는 조정을 예상한 기업</span></div></div><p class="note">순 효과가 통계적으로 확인되지 않았지만, 향후 구조적 조정을 예상하는 기업이 많습니다.</p>`,
+ g:()=>`<p class="ttl">AI의 연간 생산성 기여 (%, 기업 자체 추정과 기대)</p><div class="bars" id="gr"></div><p class="note">기대치가 실현치를 크게 앞서는 양상입니다.</p>`};
+seg('seg-t',k=>{$('#t-body').innerHTML=body[k]();
+ if(k==='a')bars($('#hrs'),[{l:'이전 조사 물결',v:1.5,c:P2,show:'1.5시간',t:'주당 1.5시간'},{l:'이번 조사',v:2.1,c:P1,show:'2.1시간',t:'주당 평균 2.1시간'}],3,v=>v);
+ if(k==='g')bars($('#gr'),[{l:'지난 3년 (추정)',v:0.2,c:P2,show:'연 0.2%',t:'지난 3년간 연 0.2% 기여 추정'},{l:'향후 3년 (기대)',v:0.6,c:P1,show:'연 0.6%',t:'향후 3년간 연 0.6% 기여 기대'}],0.8,v=>v)});
+const read={
+ yes:`<ul><li>78%의 기업이 어떤 형태로든 AI를 사용한다는 점</li><li>도입률에 비해 지출과 사용 시간의 강도가 얕다는 점</li><li>측정된 생산성 기여는 작고 기대는 크다는 점</li></ul>`,
+ no:`<ul><li>AI의 인과적 고용·생산성 효과 (인식 조사)</li><li>도입 효과의 동태 (단일 시점 조사)</li><li>실현된 결과 (기대는 경영진의 자기보고)</li><li>패널 추적과 행정자료 결합 결과</li></ul>`};
+seg('seg-read',v=>{$('#read-panel').innerHTML=read[v]});
+
+</script>
+</html>
